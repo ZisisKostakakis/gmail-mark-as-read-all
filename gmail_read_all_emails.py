@@ -71,9 +71,7 @@ def get_unread_label_message_ids(mail: imaplib.IMAP4_SSL, label: str) -> list[in
             message_ids = [int(msg) for msg in messages[0].split()]
             return message_ids
         else:
-            logging.error(
-                f"Failed to search for unread messages in {label}: {messages}"
-            )
+            logging.error(f"Failed to search for unread messages in {label}: {messages}")
             return []
     except Exception as e:
         logging.error(f"Failed to retrieve unread message IDs from {label}: {e}")
