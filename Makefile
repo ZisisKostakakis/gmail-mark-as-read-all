@@ -5,6 +5,16 @@ export $(shell sed 's/=.*//' .env)
 # Specify the shell to use
 SHELL := /bin/bash
 
+
+# print the .env variables
+echo:
+	@echo $(AWS_ACCOUNT)
+	@echo $(AWS_REGION)
+	@echo $(IMAGE_NAME)
+	@echo $(SESSION_NAME)
+	@echo $(SECRET_NAME)
+	@echo $(ROLE_ARN)
+
 docker.login:
 	aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(AWS_ACCOUNT).dkr.ecr.$(AWS_REGION).amazonaws.com
 
@@ -15,7 +25,7 @@ docker.push:
 	docker push $(AWS_ACCOUNT).dkr.ecr.$(AWS_REGION).amazonaws.com/$(IMAGE_NAME):latest
 
 build:
-	docker build --no-cache --platform linux/arm64 -t $(IMAGE_NAME) .
+	docker build --no-cache --platform linux/arm64 --provenance=false -t  $(IMAGE_NAME) .
 
 lambda.update-code:
 	aws lambda update-function-code --function-name "$(IMAGE_NAME)" \
